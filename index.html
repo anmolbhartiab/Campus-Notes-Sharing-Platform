@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% from '_macros.html' import card with context %}
+{% block body %}
+<div class="hero"><div class="wrap"><h1>Share notes. Learn together.</h1>
+<p>Find study notes and previous-year papers shared by students like you.</p>
+<form action="{{ url_for('browse') }}"><input name="q" placeholder="Search notes by title…"><button class="btn">Search</button></form>
+<div class="stats"><div><b>{{ stats.notes }}</b>Notes</div><div><b>{{ stats.users }}</b>Students</div><div><b>{{ stats.downloads }}</b>Downloads</div></div></div></div>
+<section><div class="wrap"><h2><i class="bi bi-clock-history"></i> Recently uploaded</h2>
+{% if recent %}<div class="grid">{% for n in recent %}{{ card(n) }}{% endfor %}</div>{% else %}<div class="empty">No notes yet — <a href="{{ url_for('upload') }}">be the first to upload!</a></div>{% endif %}</div></section>
+{% if top %}<section style="background:#fff"><div class="wrap"><h2><i class="bi bi-fire"></i> Most downloaded</h2><div class="grid">{% for n in top %}{{ card(n) }}{% endfor %}</div></div></section>{% endif %}
+{% endblock %}

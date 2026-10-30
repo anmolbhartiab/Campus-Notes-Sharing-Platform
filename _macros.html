@@ -1,0 +1,20 @@
+{% macro card(n, admin=False, owner=False) %}
+<div class="card">
+  <span class="tag {{ 'p' if n.kind=='paper' }}">{{ 'Question Paper' if n.kind=='paper' else n.subject }} · Sem {{ n.semester }}</span>
+  <h3><a href="{{ url_for('note', nid=n.id) }}">{{ n.title }}</a></h3>
+  <p class="meta">{{ (n.description or '')[:90] }}</p>
+  <div class="meta"><span><i class="bi bi-person"></i> {{ n.uploader }}</span><span><i class="bi bi-calendar"></i> {{ n.created_at|date }}</span>
+    <span><i class="bi bi-download"></i> {{ n.downloads }}</span>
+    <span class="star"><i class="bi bi-star-fill"></i> {{ n.avg_rating or '–' }}</span></div>
+  <div class="row">
+    <a class="btn sm" href="{{ url_for('download', nid=n.id) }}"><i class="bi bi-download"></i> Download</a>
+    <a class="btn sm out" href="{{ url_for('note', nid=n.id) }}">View</a>
+    {% if owner or admin %}
+    <form method="post" action="{{ url_for('delete_note', nid=n.id) }}" onsubmit="return confirm('Delete this note permanently?')">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% if admin %}<input type="hidden" name="from" value="admin">{% endif %}
+      <button class="btn sm red"><i class="bi bi-trash"></i></button></form>{% endif %}
+  </div>
+</div>
+{% endmacro %}
+{% macro csrf() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endmacro %}
+{% macro subjects(sel='') %}{% for s in SUBJECTS %}<option {{ 'selected' if s==sel }}>{{ s }}</option>{% endfor %}{% endmacro %}

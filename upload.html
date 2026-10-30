@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% from '_macros.html' import csrf, subjects with context %}{% block body %}
+<form class="form wide" method="post" enctype="multipart/form-data"><h2><i class="bi bi-cloud-upload"></i> Upload</h2>{{ csrf() }}
+<label>Title</label><input name="title" required minlength="3" maxlength="120">
+<label>Type</label><select name="kind"><option value="note">Study notes</option><option value="paper">Previous-year question paper</option></select>
+<label>Subject</label><select name="subject">{{ subjects() }}</select>
+<label>Semester</label><select name="semester">{% for i in range(1,9) %}<option>{{ i }}</option>{% endfor %}</select>
+<label>Description</label><textarea name="description" rows="3" maxlength="1000"></textarea>
+<label>PDF file (max 10 MB)</label><input type="file" name="file" accept="application/pdf" required>
+<button class="btn">Upload</button></form>{% endblock %}

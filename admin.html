@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% from '_macros.html' import csrf with context %}{% block body %}
+<section><div class="wrap"><h2>Admin dashboard</h2>
+<div class="kpis"><div class="kpi"><b>{{ stats.users }}</b>Students</div><div class="kpi"><b>{{ stats.notes }}</b>Notes</div><div class="kpi"><b>{{ stats.downloads }}</b>Downloads</div><div class="kpi"><b>{{ stats.reviews }}</b>Reviews</div></div>
+<h2 style="margin-top:24px">Recent activity</h2><div class="tw"><table>{% for a in activity %}<tr><td>{{ a.at[:16] }}</td><td>{{ a.who }}</td><td>{{ {'upload':'uploaded','review':'reviewed','signup':'joined'}[a.t] }} {{ a.x }}</td></tr>{% endfor %}</table></div>
+<h2 style="margin-top:24px">Students</h2><div class="tw"><table><tr><th>Name</th><th>Email</th><th>Notes</th><th>Joined</th><th></th></tr>
+{% for u in users %}<tr><td>{{ u.full_name }}{{ ' (admin)' if u.is_admin }}</td><td>{{ u.email }}</td><td>{{ u.n_notes }}</td><td>{{ u.created_at|date }}</td><td>
+{% if not u.is_admin %}<form method="post" action="{{ url_for('delete_user', uid=u.id) }}" onsubmit="return confirm('Remove this student and all their notes?')">{{ csrf() }}<button class="btn sm red">Remove</button></form>{% endif %}</td></tr>{% endfor %}</table></div>
+<h2 style="margin-top:24px">All notes</h2><div class="tw"><table><tr><th>Title</th><th>Subject</th><th>By</th><th>Date</th><th>DLs</th><th></th></tr>
+{% for n in notes %}<tr><td><a href="{{ url_for('note', nid=n.id) }}">{{ n.title }}</a></td><td>{{ n.subject }}</td><td>{{ n.uploader }}</td><td>{{ n.created_at|date }}</td><td>{{ n.downloads }}</td><td>
+<form method="post" action="{{ url_for('delete_note', nid=n.id) }}" onsubmit="return confirm('Delete this note?')">{{ csrf() }}<input type="hidden" name="from" value="admin"><button class="btn sm red">Delete</button></form></td></tr>{% endfor %}</table></div>
+</div></section>{% endblock %}

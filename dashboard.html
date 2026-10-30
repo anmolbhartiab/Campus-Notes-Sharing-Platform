@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% from '_macros.html' import card, csrf with context %}{% block body %}
+<section><div class="wrap"><h2>Hello, {{ me.full_name }} 👋</h2>
+<div class="kpis"><div class="kpi"><b>{{ mine|length }}</b>My uploads</div><div class="kpi"><b>{{ dl }}</b>Downloads of my notes</div><div class="kpi"><b>{{ saved|length }}</b>Bookmarks</div></div>
+<a class="btn" href="{{ url_for('upload') }}"><i class="bi bi-plus-lg"></i> Upload notes</a>
+<h2 style="margin-top:30px">My notes</h2>{% if mine %}<div class="grid">{% for n in mine %}{{ card(n, owner=True) }}{% endfor %}</div>{% else %}<div class="empty">You haven't uploaded anything yet.</div>{% endif %}
+<h2 style="margin-top:30px">Bookmarked</h2>{% if saved %}<div class="grid">{% for n in saved %}{{ card(n) }}{% endfor %}</div>{% else %}<div class="empty">No bookmarks yet.</div>{% endif %}
+<h2 style="margin-top:30px">Recommended for you</h2><div class="grid">{% for n in rec %}{{ card(n) }}{% endfor %}</div>
+<h2 style="margin-top:30px">Profile</h2><form class="form" style="margin:0" method="post" action="{{ url_for('profile') }}">{{ csrf() }}
+<label>Full name</label><input name="full_name" value="{{ me.full_name }}" required><label>Email</label><input value="{{ me.email }}" disabled>
+<label>New password (optional)</label><input type="password" name="password"><button class="btn">Save</button></form></div></section>{% endblock %}

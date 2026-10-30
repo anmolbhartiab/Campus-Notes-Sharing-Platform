@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% from '_macros.html' import csrf with context %}{% block body %}
+<form class="form" method="post"><h2>Create your account</h2>{{ csrf() }}
+<label>Full name</label><input name="full_name" required maxlength="80"><label>Email</label><input type="email" name="email" required>
+<label>Password</label><input type="password" name="password" required minlength="8" placeholder="8+ chars, letters & numbers">
+<label>Confirm password</label><input type="password" name="confirm" required><button class="btn">Sign up</button></form>{% endblock %}

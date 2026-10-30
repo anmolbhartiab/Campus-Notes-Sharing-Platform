@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block body %}
+<section><div class="wrap" style="max-width:760px"><h2>Quiz: {{ n.title }}</h2>
+{% for x in qs %}<div class="card" style="margin-bottom:14px" data-a="{{ x.answer }}"><b>{{ loop.index }}. {{ x.q }}</b>
+{% for o in x.options %}<label class="opt" onclick="pick(this)">{{ o }}</label>{% endfor %}</div>
+{% else %}<div class="empty">Couldn't generate a quiz — the PDF may be scanned images or too short.</div>{% endfor %}
+<a class="btn out" href="{{ url_for('quiz', nid=n.id) }}">New quiz</a> <a class="btn" href="{{ url_for('note', nid=n.id) }}">Back</a></div></section>
+<script>function pick(el){const c=el.parentElement;if(c.dataset.done)return;c.dataset.done=1;
+c.querySelectorAll('.opt').forEach(o=>{if(o.textContent.trim()===c.dataset.a)o.classList.add('ok')});
+if(el.textContent.trim()!==c.dataset.a)el.classList.add('no')}</script>{% endblock %}
